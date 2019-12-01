@@ -1,13 +1,12 @@
 package org.buckybadger.trailupdate;
 
-//import statements for android.os.
+//Import statements for system utilities.
 import android.os.Bundle;
-import android.location.Location;
+import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
-//import statements for com.google.android.gms.maps
+
+//import statements for map fragment to work
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -15,12 +14,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import android.location.Location;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-//import statements for android.app
-
-import android.util.Log;
+//import statements for menu to work
+import android.view.Menu;
 import android.view.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import static android.content.ContentValues.TAG;
 
@@ -78,7 +79,13 @@ public class viewMap extends AppCompatActivity implements OnMapReadyCallback {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onCreateOptionsMenu(Menu menu) { //Display menu in action bar
+        getMenuInflater().inflate(R.menu.menu_items, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { //Select Menu Items
         switch(item.getItemId()) {
             case R.id.create_damage_report:
                 return true;

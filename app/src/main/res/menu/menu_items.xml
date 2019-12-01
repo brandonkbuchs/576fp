@@ -1,0 +1,15 @@
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.buckybadger.trailupdate.viewMap"
+    android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
+
+    <item android:id="@+id/create_obstruction_report"
+        android:title="@string/obstruction"
+        app:showAsAction="never"/>
+    <item android:id="@+id/create_damage_report"
+        android:title="@string/damage"
+        app:showAsAction="never"/>
+
+</menu>

@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">TrailUpdate</string>
+    <string name="app_name">Trail Updater</string>
+    <string name="damage">File Damage Report</string>
+    <string name="obstruction">File Obstruction Report</string>
+    <string name="resolve">Issue Resolved</string>
 </resources>
