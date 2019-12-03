@@ -33,6 +33,10 @@
             android:name=".createReport"/>
         <activity
             android:name=".viewMap"/>
+        <activity
+            android:name=".CreateObstructionReport"/>
+        <activity
+            android:name=".CreateDamageReport"/>
     </application>
 
 </manifest>

@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Trail Updater</string>
-    <string name="damage">File Damage Report</string>
-    <string name="obstruction">File Obstruction Report</string>
+    <string name="damage">Create Damage Report</string>
+    <string name="obstruction">Create Obstruction Report</string>
     <string name="resolve">Issue Resolved</string>
+    <string name="crDTitle">Create Damage Report</string>
+    <string name="crOTitle">Create Obstruction Report</string>
+    <string name="submit">Submit Your Report</string>
+    <string name="damageType">Choose Damage Type</string>
+    <string name="obstructionType">Choose Obstruction Type</string>
+    <string name="add_msg">Additional Message</string>
 </resources>

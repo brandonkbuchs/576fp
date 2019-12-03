@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="damage_type">
+        <item>pothole</item>
+        <item>erosion</item>
+        <item>flooded</item>
+        <item>other</item>
+    </string-array>
+    <string-array name="obstruction_type">
+        <item>debris</item>
+        <item>log</item>
+        <item>rock</item>
+        <item>other</item>
+    </string-array>
+</resources>

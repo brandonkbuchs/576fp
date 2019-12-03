@@ -1,6 +1,7 @@
 package org.buckybadger.trailupdate;
 
 //Import statements for system utilities.
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -31,6 +32,9 @@ public class viewMap extends AppCompatActivity implements OnMapReadyCallback {
     //Variable Declaration
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
+
+    //Method to open a new view
+    public void startMyActivity(Intent intent) { startActivity(intent); }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { //Create the view for the screen
@@ -88,8 +92,12 @@ public class viewMap extends AppCompatActivity implements OnMapReadyCallback {
     public boolean onOptionsItemSelected(MenuItem item) { //Select Menu Items
         switch(item.getItemId()) {
             case R.id.create_damage_report:
+                Intent damageIntent = new Intent(viewMap.this, CreateDamageReport.class);
+                startMyActivity(damageIntent);
                 return true;
             case R.id.create_obstruction_report:
+                Intent obstructionIntent = new Intent(viewMap.this, CreateObstructionReport.class);
+                startMyActivity(obstructionIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
