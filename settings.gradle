@@ -1,2 +1,2 @@
-include ':app'
-rootProject.name='TrailUpdate'
+include ':app', ':lib', ':postgresql-42.2.8', ':postgis-jdbc-2.3.0'
+rootProject.name='g576final'

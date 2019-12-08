@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.buckybadger.trailupdate">
+    package="org.buckybadger.g576final">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -14,6 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyC8Ay8QlCf7kSg_gmasqZH-vnym8VBxohE" />
@@ -29,14 +30,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".createReport"/>
-        <activity
-            android:name=".viewMap"/>
-        <activity
-            android:name=".CreateObstructionReport"/>
-        <activity
-            android:name=".CreateDamageReport"/>
+        <activity android:name=".CreateDamageReport"/>
+        <activity android:name=".CreateObstructionReport"/>
+        <activity android:name=".viewMap"/>
+        <activity android:name=".createReport"/>
+        <activity android:name=".resolveReport"/>
     </application>
 
 </manifest>
