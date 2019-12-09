@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 
+import org.buckybadger.g576final.R;
+
 public class createReport extends AppCompatActivity {
 
     private Button viewMain;

@@ -7,6 +7,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.buckybadger.g576final.R;
+
 public class CreateObstructionReport extends AppCompatActivity {
 
     private Button viewMain;
