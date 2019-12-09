@@ -77,6 +77,11 @@ public class AsyncHttpPost extends AsyncTask<String, Void, JSONArray> {
         if (mData.get("tab_id").equalsIgnoreCase("1")) {
             onQueryReportExecute(Result);
         }
+        /** TODO
+         * Add else if for "tab_id" "2" onUpdateReportExecute(Result)
+         * Add else if for "tab_id" "0" onCreateReportExecute(Result)
+         *
+         */
     }
 
     private void onQueryReportExecute(JSONArray Result) {
@@ -123,5 +128,18 @@ public class AsyncHttpPost extends AsyncTask<String, Void, JSONArray> {
         }
 
 
+    }
+
+    private void onCreateReportExecute(JSONArray Result) {
+        /**TODO
+         * Parse appropriate fields
+         * modifyDB from DBUtil
+         */
+    }
+
+    private void onUpdateReportExecute(JSONArray Result) {
+        /**TODO
+         * Same as above method
+         */
     }
 }
