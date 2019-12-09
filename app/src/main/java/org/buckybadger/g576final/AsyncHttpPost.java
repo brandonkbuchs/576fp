@@ -82,14 +82,14 @@ public class AsyncHttpPost extends AsyncTask<String, Void, JSONArray> {
     private void onQueryReportExecute(JSONArray Result) {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         LatLng point;
-        String damageType;
-        String obstructionType;
-        for (int i = 0 ; i < Result.length(); i++) {
+
+        for (int i = 0 ; i < Result.length(); i++) { //iterate through all the DB entries
             try {
 
                 JSONObject report = Result.getJSONObject(i);
                 Double lng = Double.parseDouble(report.getString("longitude"));
                 Double lat = Double.parseDouble(report.getString("latitude"));
+                //We need to pass this information to resolveReport for resolution
                 String id = report.getString("report_id");
                 point = new LatLng(lat, lng);
                 builder.include(point);
@@ -98,21 +98,18 @@ public class AsyncHttpPost extends AsyncTask<String, Void, JSONArray> {
 
                 switch(reportType) {
                     case "damage": //For damage reports
-                        Log.v("Damage Report: ", report.getString("damage_type"));
-                        viewMap.addMarkers(reportType, report.getString("damage_type"), point, id);
+                        viewMap.addMarkers(reportType, report.getString("damage_type"), lat, lng, id);
                         break;
                     case "obstruction": //For obstruction reports
-                        Log.v("Obstruction Report: ", report.getString("obstruction_type"));
-                        viewMap.addMarkers(reportType, report.getString("obstruction_type"), point, id);
+                        viewMap.addMarkers(reportType, report.getString("obstruction_type"), lat, lng, id);
                         break;
                     default: //For an odd report
-                        Log.v("Report Type: ", reportType);
-                        viewMap.addMarkers(reportType, "NFI", point, id);
+                        viewMap.addMarkers(reportType, "NFI", lat, lng, id);
                         break;
                 }
 
             } catch (JSONException e) {
-                android.util.Log.v("INFO", e.toString());
+                Log.v("INFO", e.toString());
             }
         }
 

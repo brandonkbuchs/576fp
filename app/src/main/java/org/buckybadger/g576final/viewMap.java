@@ -42,6 +42,13 @@ public class viewMap extends AppCompatActivity implements OnMapReadyCallback, On
     private FusedLocationProviderClient fusedLocationClient;
     private Marker myMarker;
 
+    //Variables obtained from DB query in aSyncHttpPost
+    public static String reportID;
+    public static String reportType;
+    public static Double reportLat;
+    public static Double reportLng;
+    public static String reportDesc;
+
     //Method to open a new view
     public void startMyActivity(Intent intent) { startActivity(intent); }
 
@@ -120,15 +127,26 @@ public class viewMap extends AppCompatActivity implements OnMapReadyCallback, On
         }
     }
 
-    public static void addMarkers(String title, String desc, LatLng point, String id) { //Add Markers to Map
+    public static void addMarkers(String title, String desc, Double lat, Double lng, String id) { //Add Markers to Map
+
+
+        LatLng point = new LatLng(lat, lng);
+
 
         switch(title) {
             case "damage":
                 mMap.addMarker(new MarkerOptions().position(point)
                     .title(title + ": " + desc)
                     .snippet(id)
-
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.hazard)));
+
+                //Pass the report variables to viewMap
+                reportType = title;
+                reportDesc = desc;
+                reportLat = lat;
+                reportLng = lng;
+                reportID = id;
+                Log.v(id, title);
 
                 break;
             case "obstruction":
@@ -136,12 +154,26 @@ public class viewMap extends AppCompatActivity implements OnMapReadyCallback, On
                     .title(title + ": " + desc)
                     .snippet(id)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.obstacle)));
+                //Pass the report variables to viewMap
+                reportType = title;
+                reportDesc = desc;
+                reportLat = lat;
+                reportLng = lng;
+                reportID = id;
+                Log.v(id, title);
                 break;
             default:
                 mMap.addMarker(new MarkerOptions().position(point)
                     .title(title + ": " + desc)
                     .snippet(id)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.damage)));
+                //Pass the report variables to viewMap
+                reportType = title;
+                reportDesc = desc;
+                reportLat = lat;
+                reportLng = lng;
+                reportID = id;
+                Log.v(id, title);
                 break;
 
         }
@@ -150,11 +182,20 @@ public class viewMap extends AppCompatActivity implements OnMapReadyCallback, On
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
-        String id = marker.getSnippet();
-        Log.v(id, "RID");
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.put("tab_id", "2");
+        Log.v("Marker ID", marker.getId());
+        Log.v("Marker Position: ", marker.getPosition().toString());
+
+        //Create new intent (a new screen)
         Intent myIntent = new Intent(viewMap.this, resolveReport.class);
+
+        //Pass variables into resolveReport
+        myIntent.putExtra("reportType", reportType);
+        Log.v("reportType", reportType);
+        myIntent.putExtra("reportID", reportID);
+        myIntent.putExtra("reportDesc", reportDesc);
+        myIntent.putExtra("reportLat", reportLat);
+        myIntent.putExtra("reportLng", reportLng);
+
         startMyActivity(myIntent);
         return false;
     }
