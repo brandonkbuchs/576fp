@@ -24,6 +24,8 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import org.buckybadger.g576final.R;
+
 import static android.content.ContentValues.TAG;
 
 

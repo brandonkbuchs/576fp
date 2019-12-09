@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 
+import org.buckybadger.g576final.R;
 import org.json.JSONObject;
 
 
@@ -33,7 +34,7 @@ public class CreateDamageReport extends AppCompatActivity {
         final Spinner damageType = (Spinner) findViewById(R.id.SpinnerDamageType);
         String damage_type = damageType.getSelectedItem().toString();
 
-        reportInfo = {}
+        String [] reportInfo = {};
         Log.i(TAG, add_msg);
         Log.i(TAG, damage_type);
     }
