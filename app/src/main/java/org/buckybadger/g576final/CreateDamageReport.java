@@ -27,8 +27,12 @@ public class CreateDamageReport extends AppCompatActivity {
     private JSONObject reportInfo;
     private static final String TAG = "UserSubmissionData:";
     private FusedLocationProviderClient fusedLocationClient;
+    private String tab_id;
+    private Integer reporter_id;
+    private String report_type;
     private Double lat;
     private Double lng;
+    private String is_resolved;
 
 
     private void startMyActivity(Intent intent) {
@@ -37,8 +41,10 @@ public class CreateDamageReport extends AppCompatActivity {
 
     //Step 2 and 3--Process Data and input into DB
     public void processReportDetails() {
+
         String timestamp =
                 new java.text.SimpleDateFormat("MM/dd/yyyy h:mm:ss a").format(new Date());
+
         final EditText addMsg = (EditText) findViewById(R.id.add_msg);
         String add_msg = addMsg.getText().toString();
         add_msg = "'" + add_msg + "'";
@@ -48,7 +54,20 @@ public class CreateDamageReport extends AppCompatActivity {
         String damage_type = damageType.getSelectedItem().toString();
         damage_type = "'" + damage_type + "'";
         try {
+            JSONObject data = new JSONObject();
 
+            data.put("tab_id", "0");
+            data.put("reporter_id", reporter_id);
+            data.put("report_type", report_type);
+            data.put("damage_type", damage_type);
+            data.put("timestamp", timestamp);
+            data.put("add_msg", add_msg);
+            data.put("is_resolved", is_resolved);
+
+            //check values in 'data'
+            String dataString;
+            dataString = data.toString();
+            Log.e(TAG, "data.toString() is : " + dataString);
 
         } catch (Exception e) {
             Log.d(TAG, e.toString());
