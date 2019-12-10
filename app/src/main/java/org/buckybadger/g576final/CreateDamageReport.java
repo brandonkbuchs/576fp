@@ -39,9 +39,9 @@ public class CreateDamageReport extends AppCompatActivity {
         final EditText addMsg = (EditText) findViewById(R.id.add_msg);
         String add_msg = addMsg.getText().toString();
 
-        final Spinner obstructionType = (Spinner) findViewById(R.id.SpinnerObstructionType);
-        String obstruction_type = obstructionType.getSelectedItem().toString();
-        Log.i("obsType", obstruction_type);
+        final Spinner damageType = (Spinner) findViewById(R.id.SpinnerDamageType);
+        String damage_type = damageType.getSelectedItem().toString();
+        Log.i("damType", damage_type);
 
         try {
             HashMap<String, String> data = new HashMap<>();
@@ -49,7 +49,7 @@ public class CreateDamageReport extends AppCompatActivity {
             data.put("tab_id", "0");
             data.put("reporter_id", reporter_id);
             data.put("report_type", report_type);
-            data.put("obstruction_type", obstruction_type);
+            data.put("damage_type", damage_type);
             data.put("timestamp", timestamp);
             data.put("add_msg", add_msg);
             data.put("latitude", latitude);
@@ -62,7 +62,7 @@ public class CreateDamageReport extends AppCompatActivity {
 
             //Execute AsyncHttpPost to INSERT INTO report
             AsyncHttpPost aSyncHttpPost = new AsyncHttpPost(data, mMap);
-            aSyncHttpPost.execute("http://10.11.12.15:8080/Lab5_war_exploded/HttpServlet");
+            aSyncHttpPost.execute("http://10.11.12.16:8080/Lab5_war_exploded/HttpServlet");
 
         } catch (Exception e) {
             Log.d(TAG, e.toString());
