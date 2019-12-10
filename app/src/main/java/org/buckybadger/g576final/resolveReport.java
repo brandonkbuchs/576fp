@@ -31,7 +31,8 @@ import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 
 import java.util.HashMap;
 
-import static android.content.ContentValues.TAG;
+import static org.buckybadger.g576final.viewMap.mMap;
+import static org.buckybadger.g576final.viewMap.report_id;
 
 public class resolveReport extends AppCompatActivity {
 
@@ -46,20 +47,11 @@ public class resolveReport extends AppCompatActivity {
         setContentView(R.layout.resolve_report);
 
         //Retrieve variables from viewMap.java, STEP 1
-        Intent mIntent = getIntent();
 
-        Bundle reportDetails = mIntent.getExtras();
 
         try {
 
-            String reportType = reportDetails.getString("reportType");
-            String reportDesc = reportDetails.getString("reportDesc");
-            String reportID = reportDetails.getString("reportID");
-            Double reportLat = reportDetails.getDouble("reportLat");
-            Double reportLng = reportDetails.getDouble("reportLng");
 
-            Log.v("Report Details", reportType + "\n" + reportDesc + "\n" + reportID + "\n"
-                    + reportLat + "\n" + reportLng);
         } catch (Exception e) {
             Log.d("Bundle Error: ", e.toString());
         }
@@ -84,7 +76,13 @@ public class resolveReport extends AppCompatActivity {
         resolveReport.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(View view) {//Step 2 of TODO
+            public void onClick(View view) {
+
+                HashMap<String, String> data = new HashMap<String, String>();
+                data.put("tab_id", "2");
+                data.put("report_id", report_id);
+                AsyncHttpPost aSyncHttpPost = new AsyncHttpPost(data, mMap);
+                aSyncHttpPost.execute("http://10.11.12.15:8080/Lab5_war_exploded/HttpServlet");
             }
         });
 
