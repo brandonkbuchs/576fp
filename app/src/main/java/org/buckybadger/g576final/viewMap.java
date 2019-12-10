@@ -43,14 +43,12 @@ public class viewMap extends AppCompatActivity implements OnMapReadyCallback, On
     private Marker myMarker;
 
     //Variables obtained from DB query in aSyncHttpPost
-    public static String reportID;
-    public static String reportType;
-    public static Double reportLat;
-    public static Double reportLng;
-    public static String reportDesc;
+    public static String report_id;
+
 
     //Method to open a new view
     public void startMyActivity(Intent intent) { startActivity(intent); }
+    public void resolveActivity(Intent intent, Bundle report_id) { startActivity(intent, report_id); }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { //Create the view for the screen
@@ -140,61 +138,31 @@ public class viewMap extends AppCompatActivity implements OnMapReadyCallback, On
                     .snippet(id)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.hazard)));
 
-                //Pass the report variables to viewMap
-                reportType = title;
-                reportDesc = desc;
-                reportLat = lat;
-                reportLng = lng;
-                reportID = id;
-                Log.v(id, title);
-
                 break;
             case "obstruction":
                 mMap.addMarker(new MarkerOptions().position(point)
                     .title(title + ": " + desc)
                     .snippet(id)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.obstacle)));
-                //Pass the report variables to viewMap
-                reportType = title;
-                reportDesc = desc;
-                reportLat = lat;
-                reportLng = lng;
-                reportID = id;
-                Log.v(id, title);
                 break;
             default:
                 mMap.addMarker(new MarkerOptions().position(point)
                     .title(title + ": " + desc)
                     .snippet(id)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.damage)));
-                //Pass the report variables to viewMap
-                reportType = title;
-                reportDesc = desc;
-                reportLat = lat;
-                reportLng = lng;
-                reportID = id;
-                Log.v(id, title);
                 break;
-
         }
     }
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
+        //get the current report id
 
-        Log.v("Marker ID", marker.getId());
-        Log.v("Marker Position: ", marker.getPosition().toString());
+        report_id = marker.getSnippet();
+
 
         //Create new intent (a new screen)
         Intent myIntent = new Intent(viewMap.this, resolveReport.class);
-
-        //Pass variables into resolveReport
-        myIntent.putExtra("reportType", reportType);
-        Log.v("reportType", reportType);
-        myIntent.putExtra("reportID", reportID);
-        myIntent.putExtra("reportDesc", reportDesc);
-        myIntent.putExtra("reportLat", reportLat);
-        myIntent.putExtra("reportLng", reportLng);
 
         startMyActivity(myIntent);
         return false;
