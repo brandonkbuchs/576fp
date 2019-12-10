@@ -3,6 +3,7 @@ package org.buckybadger.g576final;
 //Import statements for system utilities.
 
 import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
@@ -14,8 +15,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -27,6 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 
+import java.sql.Connection;
 import java.util.HashMap;
 
 import static android.content.ContentValues.TAG;
@@ -35,20 +42,90 @@ import static android.content.ContentValues.TAG;
 //import statements for menu to work
 
 
-public class viewMap extends AppCompatActivity implements OnMapReadyCallback, OnMarkerClickListener {
-
+public class viewMap extends AppCompatActivity implements OnMapReadyCallback, OnMarkerClickListener,
+                                                GoogleApiClient.ConnectionCallbacks,
+                                                GoogleApiClient.OnConnectionFailedListener,
+                                                LocationListener {
     //Variable Declaration
     public static GoogleMap mMap;
-    private FusedLocationProviderClient fusedLocationClient;
-    private Marker myMarker;
-
-    //Variables obtained from DB query in aSyncHttpPost
     public static String report_id;
+    private GoogleApiClient mGoogleApiClient;
+    public static final String TAG = viewMap.class.getSimpleName();
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    private LocationRequest mLocationRequest;
+    private String latitude;
+    private String longitude;
 
 
     //Method to open a new view
     public void startMyActivity(Intent intent) { startActivity(intent); }
-    public void resolveActivity(Intent intent, Bundle report_id) { startActivity(intent, report_id); }
+
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        if (location == null) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        } else {
+            handleNewLocation(location);
+        }
+        Log.i(TAG, "Location Services connected.");
+
+    }
+
+    private void handleNewLocation(Location location) {
+        Log.d(TAG, location.toString());
+        Double lat = location.getLatitude();
+        Double lng = location.getLongitude();
+        latitude = String.valueOf(lat);
+        longitude = String.valueOf(lng);
+        LatLng latlng = new LatLng(lat, lng);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(TAG, "Location services suspended. please reconnect.");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (connectionResult.hasResolution()) {
+            try {
+                //Start an activity that tries to resolve the error
+                connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+            } catch (IntentSender.SendIntentException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        handleNewLocation(location);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mGoogleApiClient.connect();
+        onMapReady(mMap);
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { //Create the view for the screen
@@ -62,34 +139,19 @@ public class viewMap extends AppCompatActivity implements OnMapReadyCallback, On
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        //Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            //Logic to handle location object
-                            Double lat = location.getLatitude();
-                            Double lng = location.getLongitude();
-                            LatLng latLng = new LatLng(lat, lng);
+        //Adding connection capabilities to pull locations of the user
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
 
-                            Log.d(TAG, "LastKnownUserLocation: " + latLng); //Display user's last known location in the log files for review
-                            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-                        } else {
-                            //Set Lat and Long to default for Augusta, GA
-                            Double lat = 33.466;
-                            Double lng = -81.9666;
-
-                            LatLng latLng = new LatLng(lat, lng);
-
-                            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-                        }
-                    }
-                });
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)
+                .setFastestInterval(1 * 1000);
     }
+
 
     @Override
     public void onMapReady(GoogleMap map) { //Instantiate the Map.
@@ -98,6 +160,8 @@ public class viewMap extends AppCompatActivity implements OnMapReadyCallback, On
         data.put("tab_id", "1");
         AsyncHttpPost aSyncHttpPost = new AsyncHttpPost(data, mMap);
         aSyncHttpPost.execute("http://10.11.12.15:8080/Lab5_war_exploded/HttpServlet");
+
+
 
         mMap.setOnMarkerClickListener(this);
 
@@ -114,10 +178,14 @@ public class viewMap extends AppCompatActivity implements OnMapReadyCallback, On
         switch(item.getItemId()) {
             case R.id.create_damage_report:
                 Intent damageIntent = new Intent(viewMap.this, CreateDamageReport.class);
+                damageIntent.putExtra("latitude", latitude);
+                damageIntent.putExtra("longitude", longitude);
                 startMyActivity(damageIntent);
                 return true;
             case R.id.create_obstruction_report:
                 Intent obstructionIntent = new Intent(viewMap.this, CreateObstructionReport.class);
+                obstructionIntent.putExtra("latitude", latitude);
+                obstructionIntent.putExtra("longitude", longitude);
                 startMyActivity(obstructionIntent);
                 return true;
             default:
@@ -156,14 +224,12 @@ public class viewMap extends AppCompatActivity implements OnMapReadyCallback, On
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
-        //get the current report id
 
         report_id = marker.getSnippet();
 
-
         //Create new intent (a new screen)
         Intent myIntent = new Intent(viewMap.this, resolveReport.class);
-
+        myIntent.putExtra("report_id", report_id);
         startMyActivity(myIntent);
         return false;
     }
