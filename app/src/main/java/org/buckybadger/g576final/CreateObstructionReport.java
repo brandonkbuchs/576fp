@@ -28,8 +28,12 @@ public class CreateObstructionReport extends AppCompatActivity {
     private JSONObject reportInfo;
     private static final String TAG = "UserSubmissionData:";
     private FusedLocationProviderClient fusedLocationClient;
+    private String tab_id;
+    private Integer reporter_id;
+    private String report_type;
     private Double lat;
     private Double lng;
+    private String is_resolved;
 
     private void startMyActivity(Intent intent) {
         startActivity(intent);
@@ -48,8 +52,20 @@ public class CreateObstructionReport extends AppCompatActivity {
         String obstruction_type = obstructionType.getSelectedItem().toString();
         obstruction_type = "'" + obstruction_type + "'";
         try {
+            JSONObject data = new JSONObject();
 
+            data.put("tab_id", "0");
+            data.put("reporter_id", reporter_id);
+            data.put("report_type", report_type);
+            data.put("obstruction_type", obstruction_type);
+            data.put("timestamp", timestamp);
+            data.put("add_msg", add_msg);
+            data.put("is_resolved", is_resolved);
 
+            //check values in 'data'
+            String dataString;
+            dataString = data.toString();
+            Log.e(TAG, "data.toString() is : " + dataString);
         } catch (Exception e) {
             Log.d(TAG, e.toString());
         }
