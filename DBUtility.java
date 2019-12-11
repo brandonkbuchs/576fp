@@ -1,6 +1,8 @@
 package org.webproject.servlet;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -69,32 +71,33 @@ public class DBUtility {
      * @param args
      * @throws SQLException
      */
-    public static void main(String[] args) throws SQLException {
-        // You can test the methods you created here
+    public static void main(String[] args) throws SQLException {//Testing method
         JSONArray list = new JSONArray();
         DBUtility dbutil = new DBUtility();
+        ResultSet res = null;
 
-        String sql = "SELECT report.id, report_type, damage_type, " +
-                "obstruction_type, ST_X(geom) as longitude, ST_Y(geom) as latitude, " +
-                "report.add_msg FROM report, damage_report, obstruction_report WHERE " +
-                "is_resolved = 'n'";
+        String sql = "SELECT id, report_type, report.damage_type, report.obstruction_type, ST_X(geom) as longitude, ST_Y(geom) as latitude, add_msg FROM report WHERE is_resolved = 'n' ORDER BY id";
+        try {
+            res = dbutil.queryDB(sql);
 
-        ResultSet res = dbutil.queryDB(sql);
-
-        while(res.next()) {
-            HashMap<String, String> m = new HashMap<String, String>();
-            m.put("report_id", res.getString("id"));
-            m.put("report_type", res.getString("report_type"));
-            if (res.getString("report_type").equalsIgnoreCase("damage")) {
-                m.put("damage_type", res.getString("damage_type"));
-            } else if (res.getString("report_type").equalsIgnoreCase("obstruction")) {
-                m.put("obstruction_type", res.getString("obstruction_type"));
+            while (res.next()) {
+                HashMap<String, String> m = new HashMap<String, String>();
+                m.put("report_id", res.getString("id"));
+                m.put("report_type", res.getString("report_type"));
+                if (res.getString("report_type").equalsIgnoreCase("damage")) {
+                    m.put("damage_type", res.getString("damage_type"));
+                } else if (res.getString("report_type").equalsIgnoreCase("obstruction")) {
+                    m.put("obstruction_type", res.getString("obstruction_type"));
+                }
+                m.put("latitude", res.getString("latitude"));
+                m.put("longitude", res.getString("longitude"));
+                m.put("add_msg", res.getString("add_msg"));
+                list.put(m);
             }
-            m.put("latitude", res.getString("latitude"));
-            m.put("longitude", res.getString("longitude"));
-            m.put("add_msg", res.getString("add_msg"));
-            list.put(m);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
         String jsonString = list.toString();
         System.out.println(jsonString);
     }

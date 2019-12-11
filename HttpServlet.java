@@ -109,21 +109,22 @@ public class HttpServlet extends javax.servlet.http.HttpServlet {
         report_id = res_reportID.getInt(1);
         System.out.println(report_id);
 
-        sql = "insert into report (reporter_id, report_type, timestamp, geom," +
-                " add_msg) values (" + reporter_id + "," + report_type + ","
-                + timestamp + ", ST_GeomFromText('POINT(" + lon + " " + lat + ")', 4326)" + "," +
-                add_msg + ")";
-
-        dbutil.modifyDB(sql);
 
         // create damage or obstruction report
         if (report_type.equalsIgnoreCase("'damage'")) {
-            sql = "insert into damage_report (report_id, damage_type) values ('"
-                    + report_id + "'," + damage_type + ")";
+            sql = "insert into report (reporter_id, report_type, timestamp, geom," +
+                    " add_msg, damage_type) values (" + reporter_id + "," + report_type + ","
+                    + timestamp + ", ST_GeomFromText('POINT(" + lon + " " + lat + ")', 4326)" + "," +
+                    add_msg + "," + damage_type + ")";
+
+            dbutil.modifyDB(sql);
             System.out.println("Success! Damage report created.");
         } else if (report_type.equalsIgnoreCase("'obstruction'")) {
-            sql = "insert into obstruction_report (report_id, obstruction_type) values ('"
-                    + report_id + "'," + obstruction_type + ")";
+            sql = "insert into report (reporter_id, report_type, timestamp, geom," +
+                    " add_msg, obstruction_type) values (" + reporter_id + "," + report_type + ","
+                    + timestamp + ", ST_GeomFromText('POINT(" + lon + " " + lat + ")', 4326)" + "," +
+                    add_msg + "," + obstruction_type + ")";
+            dbutil.modifyDB(sql);
             System.out.println("Success! Obstruction report created.");
         } else {
             return;
@@ -140,34 +141,35 @@ public class HttpServlet extends javax.servlet.http.HttpServlet {
         response.getWriter().write(data.toString());
     }
 
-    private void queryReport(HttpServletRequest request, HttpServletResponse
-            response) throws JSONException, SQLException, IOException {
+    private void queryReport(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException {
         JSONArray list = new JSONArray();
-        String report_type = request.getParameter("report_type");
         DBUtility dbutil = new DBUtility();
+        ResultSet res = null;
 
-        String sql = "SELECT report.id, report_type, damage_type, " +
-                "obstruction_type, ST_X(geom) as longitude, ST_Y(geom) as latitude, " +
-                "report.add_msg FROM report, damage_report, obstruction_report WHERE " +
-                "is_resolved = 'n'";
+        String sql = "SELECT id, report_type, report.damage_type, report.obstruction_type, ST_X(geom) as longitude, ST_Y(geom) as latitude, add_msg FROM report WHERE is_resolved = 'n' ORDER BY id";
+        try {
+            res = dbutil.queryDB(sql);
 
-        ResultSet res = dbutil.queryDB(sql);
-
-        while(res.next()) {
-            HashMap<String, String> m = new HashMap<String, String>();
-            System.out.println(res.getString("id"));
-            m.put("report_id", res.getString("id"));
-            m.put("report_type", res.getString("report_type"));
-            if (res.getString("report_type").equalsIgnoreCase("damage")) {
-                m.put("damage_type", res.getString("damage_type"));
-            } else if (res.getString("report_type").equalsIgnoreCase("obstruction")) {
-                m.put("obstruction_type", res.getString("obstruction_type"));
+            while (res.next()) {
+                HashMap<String, String> m = new HashMap<String, String>();
+                m.put("report_id", res.getString("id"));
+                m.put("report_type", res.getString("report_type"));
+                if (res.getString("report_type").equalsIgnoreCase("damage")) {
+                    m.put("damage_type", res.getString("damage_type"));
+                } else if (res.getString("report_type").equalsIgnoreCase("obstruction")) {
+                    m.put("obstruction_type", res.getString("obstruction_type"));
+                }
+                m.put("latitude", res.getString("latitude"));
+                m.put("longitude", res.getString("longitude"));
+                m.put("add_msg", res.getString("add_msg"));
+                list.put(m);
             }
-            m.put("latitude", res.getString("latitude"));
-            m.put("longitude", res.getString("longitude"));
-            m.put("add_msg", res.getString("add_msg"));
-            list.put(m);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+        String jsonString = list.toString();
+        System.out.println(jsonString);
     }
 
     private void resolveReport(HttpServletRequest request, HttpServletResponse
