@@ -1,47 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="Trail Update App"
+        android:layout_width="378dp"
+        android:layout_height="330dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="Trail     Update     App"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        tools:layout_editor_absoluteX="137dp"
-        tools:layout_editor_absoluteY="306dp" />
+        android:textSize="70sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/createReport"
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/viewMap"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="263dp"
         android:text="Create a Report"
-        tools:layout_editor_absoluteX="144dp"
-        tools:layout_editor_absoluteY="366dp" />
+        android:textSize="15pt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.931" />
 
     <Button
         android:id="@+id/viewMap"
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/createReport"
+        android:layout_width="match_parent"
+        android:layout_height="40pt"
+        android:layout_marginBottom="150dp"
         android:text="View Map"
-        tools:layout_editor_absoluteX="164dp"
-        tools:layout_editor_absoluteY="428dp" />
+        android:textSize="15pt"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
