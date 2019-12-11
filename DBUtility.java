@@ -1,10 +1,13 @@
 package org.webproject.servlet;
 
+import org.json.JSONArray;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 
 public class DBUtility {
     private static final String Driver = "org.postgresql.Driver";
@@ -68,5 +71,31 @@ public class DBUtility {
      */
     public static void main(String[] args) throws SQLException {
         // You can test the methods you created here
+        JSONArray list = new JSONArray();
+        DBUtility dbutil = new DBUtility();
+
+        String sql = "SELECT report.id, report_type, damage_type, " +
+                "obstruction_type, ST_X(geom) as longitude, ST_Y(geom) as latitude, " +
+                "report.add_msg FROM report, damage_report, obstruction_report WHERE " +
+                "is_resolved = 'n'";
+
+        ResultSet res = dbutil.queryDB(sql);
+
+        while(res.next()) {
+            HashMap<String, String> m = new HashMap<String, String>();
+            m.put("report_id", res.getString("id"));
+            m.put("report_type", res.getString("report_type"));
+            if (res.getString("report_type").equalsIgnoreCase("damage")) {
+                m.put("damage_type", res.getString("damage_type"));
+            } else if (res.getString("report_type").equalsIgnoreCase("obstruction")) {
+                m.put("obstruction_type", res.getString("obstruction_type"));
+            }
+            m.put("latitude", res.getString("latitude"));
+            m.put("longitude", res.getString("longitude"));
+            m.put("add_msg", res.getString("add_msg"));
+            list.put(m);
         }
+        String jsonString = list.toString();
+        System.out.println(jsonString);
+    }
  }
