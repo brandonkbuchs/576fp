@@ -62,7 +62,7 @@ public class CreateObstructionReport extends AppCompatActivity {
 
             //Execute AsyncHttpPost to INSERT INTO report
             AsyncHttpPost aSyncHttpPost = new AsyncHttpPost(data, mMap);
-            aSyncHttpPost.execute("http://10.11.12.16:8080/Lab5_war_exploded/HttpServlet");
+            aSyncHttpPost.execute("http://10.11.12.17:8080/Lab5_war_exploded/HttpServlet");
 
         } catch (Exception e) {
             Log.d(TAG, e.toString());
