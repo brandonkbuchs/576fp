@@ -2,17 +2,11 @@ package org.buckybadger.g576final;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -24,10 +18,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -66,9 +57,12 @@ public class AsyncHttpPost extends AsyncTask<String, Void, JSONArray> {
             arr = new JSONArray(str);
         } catch (UnsupportedEncodingException e) {
             android.util.Log.v("UEE Error: ", e.toString());
+        } catch (JSONException e) {
+            android.util.Log.v("JSON: ", e.toString());
         } catch (Exception e) {
-            android.util.Log.v("Regular Exception: ", e.toString());
+            android.util.Log.v("Regular Exception: " , e.toString());
         }
+
         return arr;
     }
 
@@ -81,9 +75,6 @@ public class AsyncHttpPost extends AsyncTask<String, Void, JSONArray> {
             onUpdateReportExecute(Result, id);
         } else if (mData.get("tab_id").equalsIgnoreCase("0")) {
             onCreateReportExecute(Result);
-        } else if (mData.get("tab_id").equalsIgnoreCase("3")) {
-            String id = mData.get("report_id");
-            onQueryResolveReportExecute(Result, id);
         }
     }
 
@@ -91,9 +82,10 @@ public class AsyncHttpPost extends AsyncTask<String, Void, JSONArray> {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         LatLng point;
 
+
         for (int i = 0; i < Result.length(); i++) { //iterate through all the DB entries
             try {
-
+                Log.v("JSON", Result.getJSONObject(i).toString());
                 JSONObject report = Result.getJSONObject(i);
                 Double lng = Double.parseDouble(report.getString("longitude"));
                 Double lat = Double.parseDouble(report.getString("latitude"));
@@ -171,9 +163,7 @@ public class AsyncHttpPost extends AsyncTask<String, Void, JSONArray> {
     }
     private void onUpdateReportExecute(JSONArray Result, String id) {
 
-    }
-
-    private void onQueryResolveReportExecute(JSONArray Result, String id) {
 
     }
+
 }

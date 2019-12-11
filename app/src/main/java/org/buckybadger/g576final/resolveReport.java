@@ -83,6 +83,9 @@ public class resolveReport extends AppCompatActivity {
                 data.put("report_id", report_id);
                 AsyncHttpPost aSyncHttpPost = new AsyncHttpPost(data, mMap);
                 aSyncHttpPost.execute("http://10.11.12.16:8080/Lab5_war_exploded/HttpServlet");
+
+                Intent myIntent = new Intent(resolveReport.this, viewMap.class);
+                startMyActivity(myIntent);
             }
         });
 

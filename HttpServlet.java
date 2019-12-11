@@ -141,12 +141,12 @@ public class HttpServlet extends javax.servlet.http.HttpServlet {
         response.getWriter().write(data.toString());
     }
 
-    private void queryReport(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException {
+    private void queryReport(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
         JSONArray list = new JSONArray();
         DBUtility dbutil = new DBUtility();
-        ResultSet res = null;
+        ResultSet res;
 
-        String sql = "SELECT id, report_type, report.damage_type, report.obstruction_type, ST_X(geom) as longitude, ST_Y(geom) as latitude, add_msg FROM report WHERE is_resolved = 'n' ORDER BY id";
+        String sql = "SELECT id, report_type, damage_type as damage_type, obstruction_type as obstruction_type, ST_X(geom) as longitude, ST_Y(geom) as latitude, add_msg FROM report WHERE is_resolved = 'n'";
         try {
             res = dbutil.queryDB(sql);
 
@@ -168,8 +168,7 @@ public class HttpServlet extends javax.servlet.http.HttpServlet {
             e.printStackTrace();
         }
 
-        String jsonString = list.toString();
-        System.out.println(jsonString);
+        response.getWriter().write(list.toString());
     }
 
     private void resolveReport(HttpServletRequest request, HttpServletResponse
