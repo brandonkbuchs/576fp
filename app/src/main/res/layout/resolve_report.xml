@@ -9,19 +9,31 @@
 
     <Button
         android:id="@+id/resolve"
-        android:layout_width="133dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="304dp"
+        android:layout_width="match_parent"
+        android:layout_height="40pt"
+        android:layout_marginTop="192dp"
         android:text="Resolve Report"
+        android:textSize="15pt"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/goback"
-        android:layout_width="133dp"
-        android:layout_height="48dp"
+        android:layout_width="match_parent"
+        android:layout_height="40pt"
         android:text="Return to Map"
-        tools:layout_editor_absoluteX="134dp"
-        tools:layout_editor_absoluteY="379dp" />
+        android:textSize="15pt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="416dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
