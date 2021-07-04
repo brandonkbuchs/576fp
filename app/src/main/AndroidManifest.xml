@@ -30,11 +30,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
         <activity android:name=".CreateDamageReport"/>
         <activity android:name=".CreateObstructionReport"/>
         <activity android:name=".viewMap"/>
-        <activity android:name=".createReport"/>
         <activity android:name=".resolveReport"/>
     </application>
 
